@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'ingredients',
     'main',
+    'preparations',
+    'dishes',
 ]
 
 MIDDLEWARE = [
