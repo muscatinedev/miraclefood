@@ -3,7 +3,60 @@ from openpyxl.utils import get_column_letter
 
 from datetime import datetime, timedelta, date
 
-from ingredients.models import Category, Ingredient, Nutritionals
+from ingredients.models import Category, Ingredient, Nutritionals, IngredientImp
+
+
+def fixVerduraFresca():
+    noNut=Ingredient.objects.filter(nutritional__calories=0)
+   # print(noNut)
+    wb = load_workbook('/home/matte/IdeaProjects/verdure.xlsx')
+    ws = wb.active
+
+    ingredient_list=[]
+    for row in range(2, 870):
+        name = ws["B" + str(row)].value
+        cat = ws["H" + str(row)].value
+        cal = ws["C" + str(row)].value
+        glu = ws["D" + str(row)].value
+        pro = ws["E" + str(row)].value
+        lip = ws["F" + str(row)].value
+        ami = ws["G" + str(row)].value
+        if name:
+            word=name.partition(' ')[0]
+            selection=Ingredient.objects.filter(name__icontains=word).first()
+            for nn in noNut:
+                if word in nn.name:
+                    nn.nutritional.carbohydrates=glu
+                    nn.nutritional.fat=lip
+                    nn.nutritional.calories=cal
+                    nn.nutritional.proteins=pro
+                    nn.nutritional.starch=ami
+                    nn.save()
+                    print('done '+nn.name)
+
+            if selection.nutritional:
+                pass
+                #print('ok')
+            else:
+                nut=Nutritionals()
+                nut.calories=cal
+                nut.carbohydrates=glu
+                nut.proteins=pro
+                nut.fat=lip
+                nut .starch=ami
+                nut.save()
+                selection.nutritional=nut
+                selection.save()
+
+
+
+        category= Category.objects.filter(id=1)
+
+
+
+
+
+
 
 """
 
