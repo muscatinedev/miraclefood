@@ -1,12 +1,12 @@
 from django.db import models
-
+from django.urls import reverse
 
 
 class Category(models.Model):
     """
     model for ingredinet that belong to a category
     """
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=60, unique=True)
 
     class meta:
         ordering = ["name"]
@@ -27,17 +27,14 @@ class Nutritionals(models.Model):
     starch = models.FloatField()
 
 class Ingredient(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     nutritional = models.OneToOneField(Nutritionals,  on_delete=models.CASCADE, null=True, blank=True)
-
     class meta:
         ordering = ["name"]
-
-    """
-       def get_absolute_url(self):
+    def get_absolute_url(self):
         return reverse("ingredient-detail", kwargs={'pk':self.id})
-    """
+
 
 
     def __str__(self):

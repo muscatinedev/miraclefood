@@ -16,8 +16,32 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from accounts.views import (
+    login_view,
+    logout_view,
+    register_view,
+    check_username,
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('main.urls')),
+    path('dishes/', include('dishes.urls')),
+    path('ingredients/', include('ingredients.urls')),
+    path('recipes/', include('recipes.urls')),
+    path('menus/', include('menus.urls')),
+    path('suppliers/', include('suppliers.urls')),
+    path('stock/', include('stock.urls')),
+    path('login/', login_view, name='login'),
+    path('logout/', logout_view, name='logout'),
+    path('register/', register_view, name='register'),
+
+
 ]
+
+
+htmx_url_patterns=[
+    path('check_username/', check_username, name='check-username'),
+
+]
+urlpatterns+=htmx_url_patterns
